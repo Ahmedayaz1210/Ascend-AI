@@ -1,4 +1,5 @@
 import type { Config } from "tailwindcss";
+import plugin from 'tailwindcss/plugin';
 
 const config: Config = {
     darkMode: ["class"],
@@ -51,7 +52,8 @@ const config: Config = {
   				'5': 'hsl(var(--chart-5))'
   			},
 			ascendPrimary: '#256575',
-            ascendWhite: '#FFFFFF'
+            ascendWhite: '#FFFFFF',
+			
   		},
   		borderRadius: {
   			lg: 'var(--radius)',
@@ -60,6 +62,16 @@ const config: Config = {
   		}
   	}
   },
-  plugins: [require("tailwindcss-animate")],
+  plugins: [
+    require("tailwindcss-animate"),
+    plugin(function({ addUtilities }) {
+      addUtilities({
+        '.bg-ascend-gradient': {
+          background: 'linear-gradient(to bottom right, hsl(var(--background)), #E6FAF8, #E0F5F2)',
+        },
+      })
+    }),
+  ],
+  
 };
 export default config;
