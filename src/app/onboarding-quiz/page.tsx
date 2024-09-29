@@ -7,8 +7,16 @@ import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/componen
 import { Input } from "@/components/ui/input"
 import { ChevronLeft, ChevronRight } from "lucide-react"
 
-// Define the questions from your JSON file
-const questions = [
+type QuestionType = 'text' | 'single-choice' | 'multiple-choice';
+
+interface Question {
+  id: number;
+  question: string;
+  type: QuestionType;
+  options?: string[];
+}
+
+const questions: Question[] = [
   {
     id: 1,
     question: "What are your primary areas of focus for habit improvement? (Select up to 3)",
@@ -137,11 +145,13 @@ const questions = [
     question: "What's your ultimate goal for using this habit-tracking app?",
     type: "text"
   }
-]
+];
+
+type Answers = Record<number, string | string[]>;
 
 export default function OnboardingQuiz() {
   const [currentQuestion, setCurrentQuestion] = useState(0)
-  const [answers, setAnswers] = useState<Record<number, string | string[] | number>>({})
+  const [answers, setAnswers] = useState<Answers>({})
   const [direction, setDirection] = useState(0)
   const [otherText, setOtherText] = useState<Record<number, string>>({})
 
@@ -166,7 +176,7 @@ export default function OnboardingQuiz() {
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const question = questions[currentQuestion];
-    let value: string | string[] | number;
+    let value: string | string[];
   
     switch (question.type) {
       case 'multiple-choice':
@@ -178,17 +188,14 @@ export default function OnboardingQuiz() {
         }
         break;
       case 'single-choice':
+      case 'text':
         value = e.target.value;
-        // For single-choice, set the 'Other' text immediately when selected
-        if (value === "Other (please specify)") {
+        if (question.type === 'single-choice' && value === "Other (please specify)") {
           setOtherText(prev => ({ ...prev, [question.id]: '' }));
-        } else {
-          // Reset other text when a non-"Other" option is selected
+        } else if (question.type === 'single-choice') {
           setOtherText(prev => ({ ...prev, [question.id]: '' }));
         }
         break;
-      default:
-        value = e.target.value;
     }
   
     setAnswers(prev => ({
@@ -204,7 +211,6 @@ export default function OnboardingQuiz() {
       ...prev,
       [questionId]: newText
     }));
-    // Update answers to include the "Other" text for both single and multiple choice
     setAnswers(prev => ({
       ...prev,
       [questionId]: questions[currentQuestion].type === 'single-choice'
@@ -214,10 +220,8 @@ export default function OnboardingQuiz() {
   }
 
   const handleSubmit = () => {
-    // Create a copy of the answers to modify
     const cleanedAnswers = { ...answers };
   
-    // Clean up questions 1 and 5 (multiple-choice questions)
     [1, 5].forEach(questionId => {
       if (Array.isArray(cleanedAnswers[questionId])) {
         cleanedAnswers[questionId] = (cleanedAnswers[questionId] as string[]).filter(
@@ -231,7 +235,7 @@ export default function OnboardingQuiz() {
     // Redirect to the next step or dashboard
   }
 
-  const renderQuestionInput = (question: any) => {
+  const renderQuestionInput = (question: Question) => {
     switch (question.type) {
       case 'text':
         return (
@@ -265,7 +269,6 @@ export default function OnboardingQuiz() {
                 <label htmlFor={`question-${question.id}-option-${index}`}>{option}</label>
               </div>
             ))}
-            {/* Render 'Other' text input for both single and multiple choice */}
             {((question.type === 'single-choice' && (answers[question.id] as string)?.startsWith("Other")) || 
               (question.type === 'multiple-choice' && Array.isArray(answers[question.id]) && (answers[question.id] as string[]).includes("Other (please specify)"))) && (
               <Input
@@ -282,7 +285,6 @@ export default function OnboardingQuiz() {
         return null;
     }
   }
-  
   return (
     <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-white via-teal-50 to-teal-100 p-4">
       <Card className="w-full max-w-lg bg-white/80 backdrop-blur-sm shadow-xl">
