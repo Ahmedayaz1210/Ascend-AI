@@ -1,4 +1,3 @@
-import { tr } from "framer-motion/client";
 import mongoose from "mongoose";
 
 let initialized = false;

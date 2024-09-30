@@ -1,8 +1,5 @@
-import exp from "constants";
 import User from "../model/user.model";
 import {connect} from "../mongodb/mongoose";
-import { EmailAddress } from "@clerk/nextjs/server";
-import { use } from "react";
 
 export const createOrUpdateUser = async (
     id,
