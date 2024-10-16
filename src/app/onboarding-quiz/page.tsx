@@ -215,24 +215,65 @@ export default function OnboardingQuiz() {
       ...prev,
       [questionId]: questions[currentQuestion].type === 'single-choice'
         ? `Other: ${newText}`
-        : ['Other (please specify)', `Other: ${newText}`]
+        : ['Other (please specify)', '']
     }));
   }
 
-  const handleSubmit = () => {
-    const cleanedAnswers = { ...answers };
-  
-    [1, 5].forEach(questionId => {
-      if (Array.isArray(cleanedAnswers[questionId])) {
-        cleanedAnswers[questionId] = (cleanedAnswers[questionId] as string[]).filter(
-          answer => answer !== "Other (please specify)"
-        );
+  const formatAnswers = () => {
+    const formattedAnswers = questions.map(question => {
+      let answer = answers[question.id];
+
+      // Clean answers for questions 1 and 5
+      if (question.id === 1 || question.id === 5) {
+        if (Array.isArray(answer)) {
+          answer = answer.filter(a => a !== "Other (please specify)");
+          // If there's an "Other" answer, it will be the last element after filtering
+          const otherAnswer = otherText[question.id];
+          if (otherAnswer) {
+            answer.push(otherAnswer);
+          }
+        }
       }
+
+      return {
+        id: question.id,
+        question: question.question,
+        answer: answer
+      };
     });
-  
-    console.log("Quiz answers:", cleanedAnswers);
-    // Here you would typically send the cleanedAnswers to your backend or AI service
-    // Redirect to the next step or dashboard
+
+    return formattedAnswers;
+  }
+
+  const handleSubmit = async () => {
+    const formattedAnswers = formatAnswers();
+    console.log("Formatted and cleaned quiz answers:", formattedAnswers);
+
+    try {
+      const response = await fetch('https://a4bea377-5abd-43c4-9ac6-a103a77532de.mock.pstmn.io', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ answers: formattedAnswers }),
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const result = await response.json();
+      console.log("Server response:", result);
+
+      
+
+      alert("Quiz submitted successfully!");
+      // You might want to redirect here, e.g.:
+      // router.push('/dashboard');
+    } catch (error) {
+      console.error("Error submitting quiz:", error);
+      alert("There was an error submitting your quiz. Please try again.");
+    }
   }
 
   const renderQuestionInput = (question: Question) => {
