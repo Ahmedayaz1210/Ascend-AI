@@ -1,37 +1,56 @@
-# Don't have a README yet because this is an ongoing project.
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Ascend AI - AI-Powered Habit Tracker
 
-## Getting Started
+A full-stack habit tracking application that leverages RAG (Retrieval-Augmented Generation) to provide personalized habit recommendations based on James Clear's "Atomic Habits" book.
 
-First, run the development server:
+**📊 Impact:** 120+ active users
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+---
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Features
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+* **AI-Powered Habit Planning** - RAG implementation using LangChain and AWS Bedrock to extract insights from "Atomic Habits" (200+ pages)
+* **Analytics Dashboard** - Track progress, view statistics, and monitor habit streaks
+* **Personalized Recommendations** - Custom habit suggestions based on user goals and behavior patterns
+* **Goal Management** - Set, track, and achieve personal development goals
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+---
 
-## Learn More
+## Tech Stack
 
-To learn more about Next.js, take a look at the following resources:
+**Frontend:**
+* TypeScript, React.js, Next.js
+* Tailwind CSS
+* shadcn/ui components
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+**Backend:**
+* MongoDB (NoSQL database)
+* NextAuth.js (Authentication)
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+**AI Integration:**
+* LangChain (RAG orchestration)
+* AWS Bedrock API (LLM)
 
-## Deploy on Vercel
+**Deployment:**
+* Vercel (Frontend & serverless functions)
+* MongoDB Atlas (Database hosting)
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+---
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## How It Works
+
+1. Users complete an onboarding quiz about their goals
+2. AI generates a personalized habit plan using RAG on "Atomic Habits"
+3. Users track daily habits and progress through the dashboard
+4. Analytics provide insights into habit formation patterns
+
+---
+
+## Key Technical Implementation
+
+* **RAG Pipeline:** Processes "Atomic Habits" book content to provide context-aware habit recommendations
+* **Full-Stack TypeScript:** Type-safe development across frontend and backend
+* **Responsive Design:** Mobile-first approach for habit tracking on-the-go
+
+---
+
+**⭐ This project demonstrates full-stack development skills combined with modern AI integration for real-world user engagement.**
